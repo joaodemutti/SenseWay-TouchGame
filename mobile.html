@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>SenseWay TouchGame</title>
+	<meta 
+     name='viewport' 
+     content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' 
+	/>
+	<meta charset="utf-8"/>
+
+	<style>
+		html {
+			height:95%;
+		}
+		body {
+			padding-left:26%;
+			/*overflow-behaviour: contain;*/
+			overscroll-behavior: none;
+		}
+		p {
+			font-size:20vw;
+			width:60%;
+			height:47%;
+			padding-top: 13%;
+			border:black solid 2vw;
+			text-align: center;
+			border-radius:40px;
+			background-color:#d0d0d0d0;
+			box-shadow: 9px 9px 3px gray;
+			font-weight: 900;
+			position:relative;
+			bottom:-55%;
+			transition: 0.02s ease-in-out;
+		}
+		
+		div {
+
+			height:70vw;
+			width:70vw;
+		}
+
+		.up, .down {
+			transform: rotate(90deg);
+			box-shadow: 9px -9px 3px gray;
+		}
+		.pAnimB {
+			transform: rotate(97deg);
+		}
+		.pAnim {
+			transform: rotate(7deg);
+		}
+		.pAnimB2 {
+			transform: rotate(83deg);
+		}
+		.pAnim2 {
+			transform: rotate(-7deg);
+		}
+
+		#point {
+			position:absolute;
+			top: 2%;
+			left:3%;
+			font-size:100px;
+		}
+	</style>
+
+</head>
+<body>
+	<span id="point">0</span>
+	<div>
+		<p class="up">
+			<
+		</p>
+	</div>
+
+	<script>
+		var $right = document.querySelector(".right,.down");
+		var $left = document.querySelector(".left,.up");
+		var points = 0;
+		
+
+		
+
+		var moveX = 0; moveY = 0;
+
+		document.addEventListener("touchstart",
+		function(event){
+			moveX = event.touches[0].screenX
+			moveY = event.touches[0].screenY
+		},
+		false);
+
+		document.addEventListener("touchend",
+		function(event){
+			moveX = event.changedTouches[0].screenX - moveX;
+			moveY -= event.changedTouches[0].screenY;
+
+			var directionX = 0; directionY = 0;
+
+			directionX= -1;
+			if(moveY<0)directionY= -1;
+			if(moveX>0)directionX= 1;
+			if(moveY>0)directionY= 1;
+		
+			var intenseX = moveX/directionX, intenseY = moveY/directionY;
+			var slideMinimunLength = 20;
+			if(intenseX>intenseY && intenseX > slideMinimunLength)
+			{
+				if(directionX==1)action("right");
+				else action("left");
+			}
+			if(intenseX<intenseY && intenseY > slideMinimunLength)
+			{
+				if(directionY==1)action("up");
+				else action("down");
+			}
+			else action("simple");
+		},
+		false);
+
+		var $p = document.querySelector("p");
+		var $point = document.querySelector("#point");
+
+		function action(acao)
+		{
+			
+			
+			if(acao==$p.className){
+				
+				let type = 0, max = 5;
+
+				type = Math.floor(Math.random() * Math.floor(5))
+				var $class, $content;
+
+				switch(type)
+				{
+					case 0: $class = "left";   $content = "<"; break;
+					case 1: $class = "right";  $content = ">"; break;
+					case 2: $class = "up";     $content = "<"; break;
+					case 3: $class = "down";   $content = ">"; break;
+					case 4: $class = "simple"; $content = "."; break;
+				}
+				points++;
+				$point.textContent = points;
+				let anim1, anim2;
+				if(acao == "up" || acao == "down")
+				{
+					anim1 = "pAnimB";
+					anim2 = "pAnimB2";
+				}
+				else
+				{
+					anim1 = "pAnim";
+					anim2 = "pAnim2";
+				}
+				$p.style.backgroundColor = "#005f00";
+				$p.ontransitionend = function()
+					{
+						$p.ontransitionend = function()
+						{
+							$p.ontransitionend = function()
+							{
+								$p.ontransitionend = function()
+								{
+									$p.ontransitionend = function()
+									{
+										$p.ontransitionend = function()
+										{
+											$p.ontransitionend = function()
+											{
+												$p.ontransitionend = function()
+												{
+													$p.textContent= $content;
+													$p.className= $class;
+													$p.style.backgroundColor ="#d0d0d0"
+												};
+												$p.classList.remove(anim2);
+											};
+											$p.classList.add(anim2);					
+										}
+										$p.classList.remove(anim1);
+									};
+									$p.classList.add(anim1);
+								};
+								$p.classList.remove(anim2);					
+							}
+							$p.classList.add(anim2);
+						};
+						$p.classList.remove(anim1);
+					};
+				$p.classList.add(anim1);
+			}
+			if(acao=="simple"){}
+		}
+	</script>
+</body>
+</html>
