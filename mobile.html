@@ -8,55 +8,69 @@
      content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' 
 	/>
 	<meta charset="utf-8"/>
-
-	<style>
+	<style type="text/css">
 		html {
 			height:95%;
 		}
 		body {
-			padding-left:26%;
-			/*overflow-behaviour: contain;*/
 			overscroll-behavior: none;
 		}
+		
 		p {
 			font-size:20vw;
-			width:60%;
-			height:47%;
-			padding-top: 13%;
+			width:45vw;
+			height:34vw;
+			padding-top: 11vw;
 			border:black solid 2vw;
 			text-align: center;
 			border-radius:40px;
 			background-color:#d0d0d0d0;
 			box-shadow: 9px 9px 3px gray;
 			font-weight: 900;
-			position:relative;
-			bottom:-55%;
-			transition: 0.02s ease-in-out;
+			position:absolute;
+			left:27.5vw;
+			margin:0;
+		}
+
+		p.master {
+			bottom:6vw;
+
+		}
+		p.next {
+			bottom: 60vw;
+		}
+		p.second {
+			bottom: 90vw;
+		}
+		p:nth-of-type(1) {
+			bottom: 120vw;
+		}
+		p.hidden {
+			 display: none;
+			 bottom: 150vw;
+			 opacity: 0;
+		}
+
+		p.little {
+			font-size: 13vw;
+			width:22vw;
+			height:18.5vw;
+			padding-top: 3.5vw;
+			left:39vw;
 		}
 		
 		div {
-
+			margin-top: 25%;
 			height:70vw;
-			width:70vw;
+			width:100%;
 		}
+		
 
 		.up, .down {
 			transform: rotate(90deg);
 			box-shadow: 9px -9px 3px gray;
 		}
-		.pAnimB {
-			transform: rotate(97deg);
-		}
-		.pAnim {
-			transform: rotate(7deg);
-		}
-		.pAnimB2 {
-			transform: rotate(83deg);
-		}
-		.pAnim2 {
-			transform: rotate(-7deg);
-		}
-
+		
 		#point {
 			position:absolute;
 			top: 2%;
@@ -64,17 +78,17 @@
 			font-size:100px;
 		}
 	</style>
-
 </head>
 <body>
 	<span id="point">0</span>
 	<div>
-		<p class="up">
-			<
-		</p>
+		<p class="up little"><</p>
+		<p class="right little second">></p>
+		<p class="down little next">></p>
+		<p class="simple master">.</p>
+		<p class="up little hidden"><</p>
 	</div>
-
-	<script>
+	<script type="text/javascript">
 		var $right = document.querySelector(".right,.down");
 		var $left = document.querySelector(".left,.up");
 		var points = 0;
@@ -109,28 +123,48 @@
 			{
 				if(directionX==1)action("right");
 				else action("left");
-			}
+			}else{
 			if(intenseX<intenseY && intenseY > slideMinimunLength)
 			{
 				if(directionY==1)action("up");
 				else action("down");
 			}
-			else action("simple");
+			else action("simple");}
 		},
 		false);
 
-		var $p = document.querySelector("p");
+		var $p = document.querySelectorAll("p");
+		var actual = 3;
 		var $point = document.querySelector("#point");
-
+		function sucessor(num,aray){
+			if(num + 1 == aray.length)
+			{
+				return 0;
+			}else
+			{
+				return num + 1;
+			}
+		}
+		function antecessor(num,aray){
+			if(num == 0)
+			{
+				return aray.length - 1;
+			}else
+			{
+				return num - 1;
+			}
+		}
 		function action(acao)
 		{
 			
-			
-			if(acao==$p.className){
-				
-				let type = 0, max = 5;
+			console.log(acao==$p[actual].classList[0]);
+			console.log(acao+$p[actual].className);
+			if(acao==$p[actual].classList[0])
+				{ console.log("point");
+				points++; $point.textContent = points;
+				let type = 0, max = 5; //max of types
 
-				type = Math.floor(Math.random() * Math.floor(5))
+				type = Math.floor(Math.random() * Math.floor(max))
 				var $class, $content;
 
 				switch(type)
@@ -141,58 +175,62 @@
 					case 3: $class = "down";   $content = ">"; break;
 					case 4: $class = "simple"; $content = "."; break;
 				}
-				points++;
-				$point.textContent = points;
-				let anim1, anim2;
-				if(acao == "up" || acao == "down")
-				{
-					anim1 = "pAnimB";
-					anim2 = "pAnimB2";
-				}
-				else
-				{
-					anim1 = "pAnim";
-					anim2 = "pAnim2";
-				}
-				$p.style.backgroundColor = "#005f00";
-				$p.ontransitionend = function()
-					{
-						$p.ontransitionend = function()
-						{
-							$p.ontransitionend = function()
-							{
-								$p.ontransitionend = function()
-								{
-									$p.ontransitionend = function()
-									{
-										$p.ontransitionend = function()
-										{
-											$p.ontransitionend = function()
-											{
-												$p.ontransitionend = function()
-												{
-													$p.textContent= $content;
-													$p.className= $class;
-													$p.style.backgroundColor ="#d0d0d0"
-												};
-												$p.classList.remove(anim2);
-											};
-											$p.classList.add(anim2);					
-										}
-										$p.classList.remove(anim1);
-									};
-									$p.classList.add(anim1);
-								};
-								$p.classList.remove(anim2);					
-							}
-							$p.classList.add(anim2);
-						};
-						$p.classList.remove(anim1);
-					};
-				$p.classList.add(anim1);
+				
+				let time = 230;
+				animar(time,actual,$class,$content);
+
 			}
 			if(acao=="simple"){}
 		}
+
+	function proximo(mActual,mClass,mContent)
+	{
+		
+		for(var i = 3; i >= 0; i--)
+		{
+			$p[i].classList.replace($p[i].classList[0], $p[antecessor(i,$p)].classList[0])
+			$p[i].textContent = $p[antecessor(i,$p)].textContent;
+		}
+		$p[mActual + 1].classList.replace($p[mActual + 1].classList[0],mClass);
+		$p[mActual + 1].textContent = mContent;
+	}
+
+	function animar(time,mActual,mClass,mContent)
+	{
+			$p[0].animate([ { bottom: "120vw" },
+                  { bottom: "90vw" } ],time).onfinish = function(event){$p[3].style.opacity = 1;proximo(mActual,mClass,mContent)};
+			$p[1].animate([ { bottom: "90vw" },
+                  { bottom: "60vw" } ],time);
+			$p[2].animate([ 
+				{ 
+					bottom: "60vw",
+					fontSize: "13vw",
+					width:"22vw",
+					height:"18.5vw",
+					paddingTop: "3.5vw",
+					left:"39vw"
+				},
+                { 
+                  	bottom: "6vw",
+                  	fontSize:"20vw",
+					width:"45vw",
+					height:"34vw",
+					paddingTop: "11vw",
+					left:"27.5vw"
+                }],time);
+			$p[4].style.display = "block"
+			$p[4].animate([
+				{
+					opacity:0,
+					bottom:"150vw"
+				},
+				{
+					opacity:1,
+					bottom:"120vw"
+				}],time);
+			$p[3].style.opacity = 0;
+			
+	}
 	</script>
 </body>
 </html>
